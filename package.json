@@ -16,6 +16,16 @@
     "url": "https://github.com/aguirresabino/projeto01-bd2/issues"
   },
   "homepage": "https://github.com/aguirresabino/projeto01-bd2#readme",
+  "dependencies": {
+    "angular": "1.6.4",
+    "angular-route": "^1.6.5",
+    "chart.js": "^2.7.0",
+    "jquery": "^3.2.1",
+    "materialize-css": "^0.100.2"
+  },
+  "resolutions": {
+    "angular": "1.6.4"
+  },
   "devDependencies": {
     "pg": "^7.4.1"
   }
