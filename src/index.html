@@ -9,6 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="asserts/css/index.css">
 		<link rel="stylesheet" type="text/css" href="asserts/css/divMap.css">
 		<link rel="stylesheet" type="text/css" href="asserts/css/inputSearchBox.css">
+		<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
 	</head>
 
 	<body ng-controller="LocalController as Local">
@@ -28,32 +29,13 @@
 				vm.chave =  "AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q";
 		      }
 
-		    var map;
-	      	function initMap() {
-        		map = new google.maps.Map(document.getElementById('map'), {
+		    function initMap() {
+        		let map = new google.maps.Map(document.getElementById('map'), {
           			center: {lat: -6.887860, lng: -38.559366},
           			zoom: 16
         		});
-	      		var infoWindow = new google.maps.InfoWindow({map: map});
-
-		        // Tenta Utilizar o Serviço do HTML5 de Geolocalização
-		        if (navigator.geolocation) {
-		          navigator.geolocation.getCurrentPosition(function(position) {
-		            var pos = {
-		              lat: position.coords.latitude,
-		              lng: position.coords.longitude
-		            };
-
-		            infoWindow.setPosition(pos);
-		            infoWindow.setContent('Você Está Aqui! xD');
-		            map.setCenter(pos);
-		        	}, function() {
-		            	handleLocationError(true, infoWindow, map.getCenter());
-		          	});
-		        } else {
-		        	// Navegador Não Suporta Serviço de Geolocalização
-		          	handleLocationError(false, infoWindow, map.getCenter());
-		        }
+	      		
+        		getLocationFromBrowser(map);
 
 		        // Create the search box and link it to the UI element.
 		        var input = document.getElementById('searchBox');
