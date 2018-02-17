@@ -11,7 +11,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-#pac-input {
+#searchBox {
   background-color: #fff;
   font-family: Roboto;
   font-size: 15px;
@@ -22,7 +22,7 @@
   width: 300px;
 }
 
-#pac-input:focus {
+#searchBox:focus {
   border-color: #4d90fe;
 }
 
