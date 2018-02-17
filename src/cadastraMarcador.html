@@ -9,25 +9,9 @@
 	    <h3>My Google Maps Demo</h3>
 	    <div id="map"></div>
 	    
-	    <!-- MODELO
-	  	<div id="contentInfoBox">
-      		<h1 id="headHeading" class="headHeading">{{local.nome}}</h1>
-      		<div id="bodyContent">
-      			<p>
-      				<b>{{local.nome}}</b>, {{local.descricao}}.
-      			</p>
-      		</div>
-      		<div ng-repeat="(key, value) in local.comentarios">
-      			<p>
-      				<i>{value.nomeUsuario}</i>
-      				<p id="comentario">{value.comentario}</p>
-      			</p>
-      		</div>
-      	</div> -->
 
-	    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&callback=initMap">
-    </script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&callback=initMap"></script>
+      <script type="text/javascript" src="asserts/js/createMarkerInfo.js"></script>
 	    <script>
       		function initMap() {
         		var coordenadas = {lat: -6.887860, lng: -38.559366};
@@ -35,24 +19,8 @@
           			center: coordenadas,
           			zoom: 16
         		});
-        		var marker = new google.maps.Marker({
-          			position: coordenadas,
-          			map: map,
-          			title: 'Centro de Cajazeiras'
-        		});
 
-
-        		var infoBox = '<div id="contentInfoBox"><h1 id="headHeading" class="headHeading"> {{local.nome}} </h1><div id="bodyContent"><p><b> {{local.nome}} </b>, {{local.descricao}} .</p></div><div ng-repeat="(key, value) in local.comentarios"><p><i> {value.nomeUsuario} </i><p id="comentario"> {value.comentario} </p></p></div></div>';
-
-        		var infowindow = new google.maps.InfoWindow({
-    				  content: infoBox,
-              maxWidth: 150
-  				  });
-
-  				  marker.addListener('click', function() {
-      				infowindow.open(map, marker);
-    				});
-
+            createMarkerInfo(coordenadas, map);
       		}
     	</script>
 	</body>
