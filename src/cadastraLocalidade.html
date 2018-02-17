@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cadastrar Markers</title>
+    <link rel="stylesheet" type="text/css" href="asserts/css/divMap.css">
+    <link rel="stylesheet" type="text/css" href="asserts/css/index.css">
+  </head>
+  <body>
+    <h3>Cadastrar Localidade</h3>
+    <div id="map"></div>
+    	    
+    <!-- <div id="contentFormBox">
+      <form>
+        <h1 id="headFormContent" class="headFormContent">
+          <input type="text" name="nomeLocal" placeholder="Nome do Local" required>
+        </h1>
+        <div id="bodyFormContent">
+          <p>
+            <input type="text" name="descricaoLocal" placeholder="Digite uma Descricao" required>
+          </p>
+          <p>
+            <input type="submit">
+          </p>
+        </div>
+      </form>
+    </div>
+ -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&callback=initMap"></script>
+    <script>
+
+      function initMap() {
+        var coordenadas = {lat: -6.887860, lng: -38.559366};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: coordenadas,
+          zoom: 16,
+          mapTypeId: 'roadmap'
+        });
+
+        var marker = new google.maps.Marker({
+          position: coordenadas,
+          map: map,
+          title: 'Centro de Cajazeiras'
+        });
+
+        var formwindow = new google.maps.InfoWindow({
+          content: formBox,
+          maxWidth: 250
+        });
+
+        marker.addListener('click', function() {
+          formwindow.open(map, marker);
+        });
+
+        map.addListener('click', function(e) {
+          placeMarkerAndPanTo(e.latLng, map);
+        });
+      }
+
+      function placeMarkerAndPanTo(latLng, map) {
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        });
+
+        var formwindow = new google.maps.InfoWindow({
+          content: formBox,
+          maxWidth: 250
+        });
+
+        marker.addListener('click', function() {
+          formwindow.open(map, marker);
+        });
+        map.panTo(latLng);
+      }
+
+    </script>
+  </body>
+</html>
