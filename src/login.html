@@ -16,19 +16,17 @@
 
 	<body ng-controller="LocalController as Local" class="light-green lighten-5">
 
-		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
-		<div id="map"></div>
-
 		<div class="container">
 	        <div class="row">
-	            <div class="col s12 m8 offset-m2">
+	            <div class="col s12 m6 l6">
+	                
 	                <form class="login-form">
 	                    <div class="card">
 	                        <div class="card-image">
 	                            <img src="asserts/img/login-image.jpg">
 	                            <span class="card-title">
 	                            <h2>Login</h2>
-	                            <h6>Acme Inc</h6>
+	                            <h6>MapsBoladu Enterprise</h6>
 	                        </span>
 	                        </div>
 	                        <div class="card-content">
@@ -38,7 +36,7 @@
 	                            </div>
 
 	                            <div class="row">
-	                                <div class="col s12 m8 l9">
+	                                <div class="col s12 m7 l8">
 	                                    <div class="input-field">
 	                                        <input id="password" type="password">
 	                                        <label for="password">Senha</label>
@@ -59,6 +57,7 @@
 	                        </div>
 	                    </div>
 	                </form>
+
 	                <div class="row">
 	                    <div class="col s4">
 	                        <a href="#">Registrar</a>
@@ -67,6 +66,13 @@
 	                        <a href="#" class="">Esqueci a senha</a>
 	                    </div>
 	                </div>
+	            </div>
+	            <div class="col s12 m5 l5">
+	            	<br><br><br>
+	            	<div class="row">
+	            		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
+						<div id="map"></div>
+	            	</div>
 	            </div>
 	        </div>
 		</div>
@@ -177,7 +183,18 @@
 		        infoWindow.setContent(browserHasGeolocation ?
 		        		'Não Foi Possivel Determinar Sua Localização :(' :
 		                'Seu Navegador Não Suporta o Serviço de Localização ;(');
-		    }				
+		    }
+
+		    google.maps.event.addDomListener(window, 'load', initMap);
+
+        	$(document).ready(function () {
+            	$('.modal-trigger').leanModal({
+                	ready: function () {
+            	        var map = document.getElementById("map");
+        	            google.maps.event.trigger(map, 'resize');
+    	            }
+	            });
+        	});				
 		</script>
 	</body>
 </html>
