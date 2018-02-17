@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html data-ng-app="projetoBD">
+	<head>
+		<title>Home</title>
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+		<link rel="stylesheet" type="text/css" href="asserts/css/index.divMap.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/index.inputSearchBox.css">
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/login.css">
+	</head>
+
+
+	<body ng-controller="LocalController as Local" class="light-green lighten-5">
+
+		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
+		<div id="map"></div>
+
+		<div class="container">
+	        <div class="row">
+	            <div class="col s12 m8 offset-m2">
+	                <form class="login-form">
+	                    <div class="card">
+	                        <div class="card-image">
+	                            <img src="asserts/img/login-image.jpg">
+	                            <span class="card-title">
+	                            <h2>Login</h2>
+	                            <h6>Acme Inc</h6>
+	                        </span>
+	                        </div>
+	                        <div class="card-content">
+	                            <div class="input-field">
+	                                <input class="validate" id="email" type="email">
+	                                <label for="email">Email</label>
+	                            </div>
+
+	                            <div class="row">
+	                                <div class="col s12 m8 l9">
+	                                    <div class="input-field">
+	                                        <input id="password" type="password">
+	                                        <label for="password">Senha</label>
+	                                    </div>
+	                                </div>
+	                                <div class="col s12 m4 l3">
+	                                    <div class="input-field">
+	                                        <input type="checkbox" id="remember-me" />
+	                                        <label for="remember-me">Lembrar</label>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card-action blue-grey lighten-3">
+	                            <div class="center-align">
+	                                <a href="login.html" class="btn blue-grey darken-1"><i class="material-icons left">vpn_key</i>Login</a>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </form>
+	                <div class="row">
+	                    <div class="col s4">
+	                        <a href="#">Registrar</a>
+	                    </div>
+	                    <div class="col s8 right-align">
+	                        <a href="#" class="">Esqueci a senha</a>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+		</div>
+
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" async defer></script>
+		<script type="text/javascript">
+			angular.module('projetoBD', [])
+				.controller('LocalController', LocalController);
+
+			function LocalController() {
+				var vm = this;
+
+				vm.chave =  "AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q";
+		      }
+
+		    var map;
+	      	function initMap() {
+        		map = new google.maps.Map(document.getElementById('map'), {
+          			center: {lat: -6.887860, lng: -38.559366},
+          			zoom: 16
+        		});
+	      		var infoWindow = new google.maps.InfoWindow({map: map});
+
+		        // Tenta Utilizar o Serviço do HTML5 de Geolocalização
+		        if (navigator.geolocation) {
+		          navigator.geolocation.getCurrentPosition(function(position) {
+		            var pos = {
+		              lat: position.coords.latitude,
+		              lng: position.coords.longitude
+		            };
+
+		            infoWindow.setPosition(pos);
+		            infoWindow.setContent('Você Está Aqui! xD');
+		            map.setCenter(pos);
+		        	}, function() {
+		            	handleLocationError(true, infoWindow, map.getCenter());
+		          	});
+		        } else {
+		        	// Navegador Não Suporta Serviço de Geolocalização
+		          	handleLocationError(false, infoWindow, map.getCenter());
+		        }
+
+		        // Create the search box and link it to the UI element.
+		        var input = document.getElementById('searchBox');
+		        var searchBox = new google.maps.places.SearchBox(input);
+		        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+		        // Bias the SearchBox results towards current map's viewport.
+		        map.addListener('bounds_changed', function() {
+		        	searchBox.setBounds(map.getBounds());
+		        });
+
+		        var markers = [];
+		        // Listen for the event fired when the user selects a prediction and retrieve
+		        // more details for that place.
+		        searchBox.addListener('places_changed', function() {
+		        	var places = searchBox.getPlaces();
+
+		        	if (places.length == 0) {
+		            	return;
+		          	}
+
+		          	// Clear out the old markers.
+		          	markers.forEach(function(marker) {
+			            marker.setMap(null);
+		          	});
+		          	markers = [];
+
+		          	// For each place, get the icon, name and location.
+		          	var bounds = new google.maps.LatLngBounds();
+		          	places.forEach(function(place) {
+			            if (!place.geometry) {
+		            	  	console.log("Returned place contains no geometry");
+		              		return;
+		           		}
+		            	var icon = {
+		              		url: place.icon,
+		              		size: new google.maps.Size(71, 71),
+		              		origin: new google.maps.Point(0, 0),
+			            	anchor: new google.maps.Point(17, 34),
+		              		scaledSize: new google.maps.Size(25, 25)
+		            	};
+
+		            	// Create a marker for each place.
+		            	markers.push(new google.maps.Marker({
+				            map: map,
+		              		icon: icon,
+		              		title: place.name,
+		              		position: place.geometry.location
+		            	}));
+
+		            	if (place.geometry.viewport) {
+		              		// Only geocodes have viewport.
+		              		bounds.union(place.geometry.viewport);
+		            	} else {
+		              		bounds.extend(place.geometry.location);
+		            	}
+		          	});
+		        	map.fitBounds(bounds);
+		        });
+	        };
+
+		    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+		    	infoWindow.setPosition(pos);
+		        infoWindow.setContent(browserHasGeolocation ?
+		        		'Não Foi Possivel Determinar Sua Localização :(' :
+		                'Seu Navegador Não Suporta o Serviço de Localização ;(');
+		    }				
+		</script>
+	</body>
+</html>
