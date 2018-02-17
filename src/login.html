@@ -20,7 +20,7 @@
 	        <div class="row">
 	            <div class="col s12 m6 l6">
 	                
-	                <form class="login-form">
+	                <form class="login-form" action="*" method="POST">
 	                    <div class="card">
 	                        <div class="card-image">
 	                            <img src="asserts/img/login-image.jpg">
@@ -31,14 +31,14 @@
 	                        </div>
 	                        <div class="card-content">
 	                            <div class="input-field">
-	                                <input class="validate" id="email" type="email">
+	                                <input class="validate" id="email" type="email" required>
 	                                <label for="email">Email</label>
 	                            </div>
 
 	                            <div class="row">
 	                                <div class="col s12 m7 l8">
 	                                    <div class="input-field">
-	                                        <input id="password" type="password">
+	                                        <input id="password" type="password" required>
 	                                        <label for="password">Senha</label>
 	                                    </div>
 	                                </div>
@@ -52,7 +52,7 @@
 	                        </div>
 	                        <div class="card-action blue-grey lighten-3">
 	                            <div class="center-align">
-	                                <a href="login.html" class="btn blue-grey darken-1"><i class="material-icons left">vpn_key</i>Login</a>
+	                                <button type="submit" class="btn blue-grey darken-1"><a href="login.html"><i class="material-icons left">vpn_key</i>Login</a></button>
 	                            </div>
 	                        </div>
 	                    </div>
