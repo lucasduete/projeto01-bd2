@@ -9,23 +9,9 @@
     <h3>Cadastrar Localidade</h3>
     <div id="map"></div>
     	    
-    <!-- <div id="contentFormBox">
-      <form>
-        <h1 id="headFormContent" class="headFormContent">
-          <input type="text" name="nomeLocal" placeholder="Nome do Local" required>
-        </h1>
-        <div id="bodyFormContent">
-          <p>
-            <input type="text" name="descricaoLocal" placeholder="Digite uma Descricao" required>
-          </p>
-          <p>
-            <input type="submit">
-          </p>
-        </div>
-      </form>
-    </div>
- -->
+    
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&callback=initMap"></script>
+    <script type="text/javascript" src="asserts/js/createMarkerForm.js"></script>
     <script>
 
       function initMap() {
@@ -37,41 +23,9 @@
           mapTypeId: 'roadmap'
         });
 
-        var marker = new google.maps.Marker({
-          position: coordenadas,
-          map: map,
-          title: 'Centro de Cajazeiras'
-        });
-
-        var formwindow = new google.maps.InfoWindow({
-          content: formBox,
-          maxWidth: 250
-        });
-
-        marker.addListener('click', function() {
-          formwindow.open(map, marker);
-        });
-
         map.addListener('click', function(e) {
-          placeMarkerAndPanTo(e.latLng, map);
+          createMarkerForm(e.latLng, map);
         });
-      }
-
-      function placeMarkerAndPanTo(latLng, map) {
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map
-        });
-
-        var formwindow = new google.maps.InfoWindow({
-          content: formBox,
-          maxWidth: 250
-        });
-
-        marker.addListener('click', function() {
-          formwindow.open(map, marker);
-        });
-        map.panTo(latLng);
       }
 
     </script>
