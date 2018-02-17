@@ -1,15 +1,15 @@
 function createMarkerInfo(coordenadas, map) {
   
-  var marker = new google.maps.Marker({
+  let marker = new google.maps.Marker({
       position: coordenadas,
       map: map,
       title: '{{local.nome}}'
   });
 
 
-  var infoBox = '<div id="contentInfoBox"><h1 id="headHeading" class="headHeading"> {{local.nome}} </h1><div id="bodyContent"><p><b> {{local.nome}} </b>, {{local.descricao}} .</p></div><div ng-repeat="(key, value) in local.comentarios"><p><i> {value.nomeUsuario} </i><p id="comentario"> {value.comentario} </p></p></div></div>';
+  let infoBox = '<div id="contentInfoBox"><h1 id="headHeading" class="headHeading"> {{local.nome}} </h1><div id="bodyContent"><p><b> {{local.nome}} </b>, {{local.descricao}} .</p></div><div ng-repeat="(key, value) in local.comentarios"><p><i> {value.nomeUsuario} </i><p id="comentario"> {value.comentario} </p></p></div></div>';
 
-  var infowindow = new google.maps.InfoWindow({
+  let infowindow = new google.maps.InfoWindow({
     content: infoBox,
     maxWidth: 200
   });
