@@ -8,7 +8,14 @@ module.exports = (sequelize, DataTypes) => {
     nota: DataTypes.FLOAT
   }, {});
   Localidade.associate = function(models) {
-    // associations can be defined here
+    Localidade.belongsTo(models.Usuario, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
+    Localidade.hasMany(models.Avaliacao, {
+      foreignKey: 'localidadeId',
+      as: 'avaliacoesLocalidade'
+    })
   };
   return Localidade;
 };

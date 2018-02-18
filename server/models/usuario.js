@@ -6,7 +6,14 @@ module.exports = (sequelize, DataTypes) => {
     senha: DataTypes.STRING
   }, {});
   Usuario.associate = function(models) {
-    // associations can be defined here
+    Usuario.hasMany(models.Localidade, {
+      foreignKey: 'userId',
+      as: 'localidadesUser'
+    });
+    Usuario.hasMany(models.Avaliacao, {
+      foreignKey: 'userId',
+      as: 'avaliacoesUser'
+    });
   };
   return Usuario;
 };

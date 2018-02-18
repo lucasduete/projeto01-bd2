@@ -5,7 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     comentario: DataTypes.STRING
   }, {});
   Avaliacao.associate = function(models) {
-    // associations can be defined here
+    Avaliacao.belongsTo(models.Usuario, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
+    Avaliacao.belongsTo(models.Localidade, {
+      foreignKey: 'localidadeId',
+      onDelete: 'CASCADE'
+    });
   };
   return Avaliacao;
 };
