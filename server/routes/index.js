@@ -1,5 +1,6 @@
 let userController = require('../controllers').usuario;
 
-module.exports = (app) => {
-   app.post('/api/cadastrar-user', userController.create);
+module.exports = (api) => {
+   api.post('/api/user/cadastro', userController.create);
+   api.get('/api/user/:userId', userController.read);
 };
