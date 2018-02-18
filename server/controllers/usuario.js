@@ -26,28 +26,27 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    update(req, res){
+    /*update(req, res) {
         return Usuario
-            .findById(req.params.userId)
-            .then(success => {
-                if(!success){
-                    return res.status(404).send({
-                        message: 'Usuario Not Found',
-                    });
-                }
-                return success
-                    .update({
-                        nome: req.body.nome || success.nome,
-                        email: req.body.email || success.email,
-                        senha: req.body.senha || success.senha
-                    })
-                    .then(() => res.status(200).send(success))
-                    .catch((error) => res.status(400).send(error));
-            })
-            .catch(error => res.status(400).send(error));
-    },
+          .findById(req.params.userId)
+          .then(success => {
+            if (!success) {
+              return res.status(404).send({
+                message: 'Usuario Not Found',
+              });
+            }
+            console.log("ENCONTROU O USUÁRIO NO BANCO DE  DADOS");
+            return success
+              .update({
+                nome: req.body.nome || success.title,
+              })
+              .then(() => res.status(200).send(success))
+              .catch((error) => res.status(400).send(error));
+          })
+          .catch((error) => res.status(400).send(error));
+      },
 
     delete(req, res){
         //codificar
-    }
+    }*/
 }
