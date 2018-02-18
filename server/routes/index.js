@@ -7,4 +7,5 @@ module.exports = (api) => {
    //api.patch('api/user/alterar-dados/:userId', userController.update);
 
    api.post('/api/localidade/cadastrar', localidadeController.create);
+   api.get('/api/localidade/:localId', localidadeController.read);
 };
