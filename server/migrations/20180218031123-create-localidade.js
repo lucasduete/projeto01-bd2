@@ -29,8 +29,7 @@ module.exports = {
       },
       nota: {
         allowNull: false,
-        type: Sequelize.FLOAT,
-        defaultValue: 0
+        type: Sequelize.FLOAT
       },
       createdAt: {
         allowNull: false,
