@@ -10,16 +10,17 @@
 		<link rel="stylesheet" type="text/css" href="asserts/css/divMap.css">
 		<link rel="stylesheet" type="text/css" href="asserts/css/inputSearchBox.css">
 		<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
-		<script type="text/javascript" src="asserts/js/createMarkerInfo.js.js"></script>
+		<script type="text/javascript" src="asserts/js/createMarkerInfo.js"></script>
+		<script type="text/javascript" src="asserts/js/setSearchBox.js"></script>
 	</head>
 
-	<body ng-controller="UserController as User">
+	<body ng-controller="LocalController as Local" ng-init="Local.loadMarkers()">
 
 		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
 		<div id="map"></div>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
-    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" async defer></script>
+    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" defer></script>
 		<script type="text/javascript">
 			angular.module('projetoBD', [])
 				.controller('LocalController', LocalController);
@@ -30,22 +31,22 @@
 					var vm = this;
 
 					vm.loadMarkers = function loadMarkers() {
+						console.log("Pelo menos entrou");
 				  		$http({
-					    	url: 'http:localhost:8080/api/localidades',
-					    	data: credenciais,
+					    	url: 'http://localhost:3000/api/localidades',
 					    	method: 'GET'
-				  		})
-					  		.success(function(data){
-				    			console.log('Data: ', data);
+				  		}).then(function (success) {
+				  			let data = success.data;
+				  			console.log('Data: ', data);
 				    			
-				    			let markers = data.localidades;
-				    			for (marker of markers) {
-				    				createMarkerInfo(marker, map);
-				    			};
-				  			})
-				  			.error(function(err){
-				    			console.log('Erro: ', err);
-				  			});
+				    		let markers = data.localidades;
+				    		for (marker of markers) {
+				    			createMarkerInfo(marker, map);
+				    		};
+
+						   },function (error){
+						   		console.log('Erro: ', error);
+						   });
 					}
 
 				}
