@@ -18,18 +18,16 @@ routes(api);
 
 api.use(cors(
 	{
-		"origin": "*",
-		"methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-		"preflightContinue": false,
-		"optionsSuccessStatus": 204
+		credentials: true,
+		origin: true
 	}
 ));
 
 /* //cors
 api.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
+	res.header("Access-Control-Allow-Credentials", true);
 	res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-	res.header("Access-Control-Allow-Credentials", "true");
 	res.header("Access-Control-Allow-Headers", "accept, origin, X-Requested-With, Content-Type, X-Codingpedia, Authorization");
 	res.header("Access-Control-Max-Age", "172800");
 	next();
