@@ -101,22 +101,20 @@
 					};
 		
 					console.log("email do user: " + credenciais.email);
-					console.log("senha do user: " +credenciais.senha);
-					location.href="home.html";
+					console.log("senha do user: " + credenciais.senha);
 			  		$http({
 				    	url: 'http://localhost:3000/api/login',
 				    	data: credenciais,
-				    	method: 'POST'
-			  		})
-				  		.success(function(data){
-			    			console.log('Data: ', data);
+				    	method: 'GET'
+			  		}).then(function (success) {
+			  				let data = success.data;
+				  			console.log('Data: ', data);
 			    			localStorage.usuarioEmail = credenciais.email;
 
-			    			location.href="/home.html";
-			  			})
-			  			.error(function(err){
-			    			console.log('Erro: ', err);
-			  			});
+			    			location.href="home.html";				    		
+						   },function (error){
+						   		console.log('Erro: ', error);
+						   });
 				}
 
 			}
