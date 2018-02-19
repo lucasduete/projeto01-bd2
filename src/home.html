@@ -34,28 +34,17 @@
 					var vm = this;
 
 					vm.loadMarkers = function loadMarkers() {
-						console.log("Pelo menos entrou");
-						let markers = [];
-				    		var marcadorzin = {
-             					latitude : "-6.887860",
-              					longitude: "-38.559366",
-              					"nome": "centro de cz",
-              					"descricao": "centrin",
-              					"nota": 4.5,
-              					"id" : 1
-            				}
-				    		markers.push(marcadorzin);
-				    		for (marker of markers) {
-				    			createMarkerInfo(marker, map);
-				    		};
-
 				  		$http({
 					    	url: 'http://localhost:3000/api/localidades',
 					    	method: 'GET'
 				  		}).then(function (success) {
 				  			let data = success.data;
 				  			console.log('Data: ', data);
-				    			
+				    		
+				    		let markers = data;
+				    		for (marker of markers) {
+				    			createMarkerInfo(marker, map);
+				    		};
 				    		
 						   },function (error){
 						   		console.log('Erro: ', error);
