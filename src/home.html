@@ -12,7 +12,7 @@
 		<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
 	</head>
 
-	<body ng-controller="LocalController as Local">
+	<body ng-controller="UserController as User">
 
 		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
 		<div id="map"></div>
@@ -21,13 +21,9 @@
     	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" async defer></script>
 		<script type="text/javascript">
 			angular.module('projetoBD', [])
-				.controller('LocalController', LocalController);
+				.controller('UserController', UserController);
 
-			function LocalController() {
-				var vm = this;
-
-				vm.chave =  "AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q";
-		      }
+			
 
 		    function initMap() {
         		let map = new google.maps.Map(document.getElementById('map'), {

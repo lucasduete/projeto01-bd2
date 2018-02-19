@@ -14,13 +14,13 @@
 	</head>
 
 
-	<body ng-controller="LocalController as Local" class="light-green lighten-5">
+	<body ng-controller="UserController as User" class="light-green lighten-5">
 
 		<div class="container">
 	        <div class="row">
 	            <div class="col s12 m6 l6">
 	                
-	                <form class="login-form" action="*" method="POST">
+	                <form class="login-form">
 	                    <div class="card">
 	                        <div class="card-image">
 	                            <img src="asserts/img/login-image.jpg">
@@ -52,7 +52,7 @@
 	                        </div>
 	                        <div class="card-action blue-grey lighten-3">
 	                            <div class="center-align">
-	                                <button type="submit" class="btn blue-grey darken-1"><a href="login.html"><i class="material-icons left">vpn_key</i>Login</a></button>
+	                                <button data-ng-click="User.login()" class="btn blue-grey darken-1"><i class="material-icons left">vpn_key</i>Login</button>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -83,15 +83,50 @@
 
     	<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
     	<script type="text/javascript" src="asserts/js/setSearchBox.js"></script>
+
 		<script type="text/javascript">
 			angular.module('projetoBD', [])
+				.controller('UserController', UserController)
 				.controller('LocalController', LocalController);
 
-			function LocalController() {
+			function UserController($http) {
 				var vm = this;
 
-				vm.chave =  "AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q";
-		      }
+				vm.login = function login() {
+					const credenciais = {
+						email: document.getElementById('email').value,
+						senha: document.getElementById('password').value
+					};
+		
+					console.log("email do user: " + credenciais.email);
+					console.log("senha do user: " +credenciais.senha);
+					location.href="home.html";
+			  		$http({
+				    	url: 'http:localhost:8080/api/user/login',
+				    	data: credenciais,
+				    	method: 'POST'
+			  		})
+				  		.success(function(data){
+			    			console.log('Data: ', data);
+			    			localStorage.usuarioEmail = credenciais.email;
+
+			    			location.href="/home.html";
+			  			})
+			  			.error(function(err){
+			    			console.log('Erro: ', err);
+			  			});
+				}
+
+			}
+			UserController.$inject = ['$http'];
+
+
+			var markers = [];
+			function LocalController($http) {
+				
+
+			}
+			LocalController.$inject = ['$http'];
 
 		    function initMap() {
         		let map = new google.maps.Map(document.getElementById('map'), {
