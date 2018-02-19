@@ -19,8 +19,20 @@
 
 	<body ng-controller="LocalController as Local" ng-init="Local.loadMarkers()">
 
+		<div class="container">
+			<div class="row">
+		        <div class="col s12 m8 l8 offset-l1 offset-l1">
+		          <div class="card-panel">
+		            <h4 class="header2 flow-text" style="margin-left: 5%;">Bem Vindo 
+		            	{{Local.usuario.nome}}, <i>{{Local.usuario.email}}</i>
+		            </h4>
+		           </div> 
+		        </div>
+	      	</div>
+		</div>
+
 		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
-		<div id="map"></div>
+		<div id="map" style="width: 85%; height: 80%; margin: 0 auto"></div>
 
 
 		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -35,6 +47,8 @@
 
 				function LocalController($http) {
 					vm = this;
+
+					vm.usuario = JSON.parse(localStorage.usuario);
 
 					vm.loadMarkers = function loadMarkers() {
 						map.addListener('click', function(e) {
