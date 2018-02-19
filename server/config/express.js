@@ -10,7 +10,7 @@ let api = express();
 api.use(logger('dev'));
 
 api.use(bodyParser.json());
-api.use(bodyParser.urlencoded({ extended: false }));
+api.use(bodyParser.urlencoded({ extended: true }));
 
 let router = express.Router();
 
