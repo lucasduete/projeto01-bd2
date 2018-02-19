@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="asserts/css/divMap.css">
 		<link rel="stylesheet" type="text/css" href="asserts/css/inputSearchBox.css">
 		<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
+		<script type="text/javascript" src="asserts/js/createMarkerInfo.js.js"></script>
 	</head>
 
 	<body ng-controller="UserController as User">
@@ -21,12 +22,37 @@
     	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" async defer></script>
 		<script type="text/javascript">
 			angular.module('projetoBD', [])
-				.controller('UserController', UserController);
+				.controller('LocalController', LocalController);
 
-			
+				var map;
 
-		    function initMap() {
-        		let map = new google.maps.Map(document.getElementById('map'), {
+				function LocalController($http) {
+					var vm = this;
+
+					vm.loadMarkers = function loadMarkers() {
+				  		$http({
+					    	url: 'http:localhost:8080/api/localidades',
+					    	data: credenciais,
+					    	method: 'GET'
+				  		})
+					  		.success(function(data){
+				    			console.log('Data: ', data);
+				    			
+				    			let markers = data.localidades;
+				    			for (marker of markers) {
+				    				createMarkerInfo(marker, map);
+				    			};
+				  			})
+				  			.error(function(err){
+				    			console.log('Erro: ', err);
+				  			});
+					}
+
+				}
+				LocalController.$inject = ['$http'];
+
+			function initMap() {
+        		map = new google.maps.Map(document.getElementById('map'), {
           			center: {lat: -6.887860, lng: -38.559366},
           			zoom: 16
         		});
