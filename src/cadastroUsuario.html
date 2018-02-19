@@ -75,14 +75,14 @@
           console.log("email do user: " + USUARIO.email);
           console.log("senha do user: " + USUARIO.senha);
             $http({
-              url: 'http://localhost:8080/api/user/cadastro',
+              url: 'http://localhost:3000/api/user/cadastro',
               data: USUARIO,
               method: 'POST'
             }).then(function (success) {
                 let data = success.data;
                 console.log('Data: ', data);
                   
-                location.href="login.html";
+                location.href="index.html";
                },function (error){
                   console.log('Erro: ', error);
                });
