@@ -11,7 +11,6 @@
 		<link rel="stylesheet" type="text/css" href="asserts/css/inputSearchBox.css">
 		<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
 		<script type="text/javascript" src="asserts/js/createMarkerInfo.js"></script>
-		<script type="text/javascript" src="asserts/js/createMarkerForm.js"></script>
 		<script type="text/javascript" src="asserts/js/setSearchBox.js"></script>
 
 		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -23,6 +22,8 @@
 		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
 		<div id="map"></div>
 
+
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
     	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" defer></script>
 		<script type="text/javascript">
@@ -30,11 +31,16 @@
 				.controller('LocalController', LocalController);
 
 				var map;
+				var vm;
 
 				function LocalController($http) {
-					var vm = this;
+					vm = this;
 
 					vm.loadMarkers = function loadMarkers() {
+						map.addListener('click', function(e) {
+          					createMarkerForm(e.latLng, map);
+        				});
+
 				  		$http({
 					    	url: 'http://localhost:3000/api/localidades',
 					    	method: 'GET'
@@ -47,6 +53,29 @@
 				    			createMarkerInfo(marker, map);
 				    		};
 				    		
+						   },function (error){
+						   		console.log('Erro: ', error);
+						   });
+					}
+
+					vm.createMarker = function createMarker() {
+						let marker = JSON.parse(localStorage.marcador);
+
+            			console.log(marker.longitude);
+            			console.log(marker.latitude);
+            			console.log(marker.nome);
+            			console.log(marker.descricao);
+            			console.log(marker);
+
+            			$http({
+					    	url: 'http://localhost:3000/api/localidade/cadastrar',
+					    	data: marker,
+					    	method: 'POST'
+				  		}).then(function (success) {
+				  			let data = success.data;
+				  			console.log('Data: ', data);
+
+				  			location.reload();				    		
 						   },function (error){
 						   		console.log('Erro: ', error);
 						   });
@@ -66,11 +95,32 @@
 
 		        let searchBox = document.getElementById('searchBox');
 		        setSearchBox(searchBox, map);
-
-		        map.addListener('click', function(e) {
-          			createMarkerForm(e.latLng, map);
-        		});
 	        };
+
+	        function createMarkerForm(coordenadas, map) {
+
+				let formBox = '<div id="content" style="width:330px;"><h5 class="flow-text">Cadastro de Marker</h5><input type="text" id="localNome" name="nomeLocal" placeholder="Nome do Local" required><div id="bodyFormContent"><p><input type="text" id="localDescricao" name="descricaoLocal" placeholder="Digite uma Descricao" required></p><p><button class="waves-effect waves-light red btn" style="margin-right:2%" onclick="location.href=\'cadastarLocal.html\'"><i class="material-icons right">menu</i>Nova Pagina</button><button onclick="localStorage.marcador = JSON.stringify({latitude: ' + coordenadas.lat() + ',longitude: ' + coordenadas.lng() + ',nome: document.getElementById(\'localNome\').value, descricao: document.getElementById(\'localDescricao\').value,nota: 0,id : 1}); callCreateMarker();" class="waves-effect waves-light btn"><i class="material-icons right">send</i>enviar</button></p></div></div>';
+
+			    let marker = new google.maps.Marker({
+			        position: coordenadas,
+			        map: map
+			    });
+
+			    let formwindow = new google.maps.InfoWindow({
+				    content: formBox,
+			        maxWidth: 330
+			    });
+
+			    marker.addListener('click', function() {
+			    	formwindow.open(map, marker);
+			    });
+
+			    map.panTo(coordenadas);
+			};
+
+			function callCreateMarker() {
+			    vm.createMarker();
+			}
 		</script>
 	</body>
 </html>
