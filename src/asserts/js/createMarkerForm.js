@@ -16,7 +16,7 @@ function createMarkerForm(coordenadas, map) {
     	formwindow.open(map, marker);
     });
 
-    map.panTo(coordenadas);    
+    map.panTo(coordenadas);
 };
 
 	// FORMATO DA DIV
