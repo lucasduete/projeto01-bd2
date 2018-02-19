@@ -16,7 +16,16 @@ let router = express.Router();
 
 routes(api);
 
-//cors
+api.use(cors(
+	{
+		"origin": "*",
+		"methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+		"preflightContinue": false,
+		"optionsSuccessStatus": 204
+	}
+));
+
+/* //cors
 api.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
@@ -25,7 +34,7 @@ api.use(function(req, res, next) {
 	res.header("Access-Control-Max-Age", "172800");
 	next();
 });
-
+ */
 /*router.use((req, res, next) => {
 	console.log("Algo acontecendo"); //Será impresso em todas as rotas
 	next();
