@@ -9,12 +9,6 @@ let api = express();
 
 api.use(logger('dev'));
 
-//cors
-api.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	next();
-});
-
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: false }));
 
@@ -22,10 +16,16 @@ let router = express.Router();
 
 routes(api);
 
-router.use((req, res, next) => {
-	console.log("Algo acontecendo"); //Será impresso em todas as rotas
+//cors
+router.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
 	next();
 });
+
+/*router.use((req, res, next) => {
+	console.log("Algo acontecendo"); //Será impresso em todas as rotas
+	next();
+});*/
 
 router.get('*', (req, res) => res.status(200).send({
   message: 'Projeto de Banco de dados II',
