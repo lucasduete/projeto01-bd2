@@ -3,6 +3,7 @@ let localidadeController = require('../controllers').localidade;
 let avaliacaoController = require('../controllers').avaliacao;
 
 module.exports = (api) => {
+   api.get('/api/login', userController.login);
    api.post('/api/user/cadastro', userController.create);
    api.get('/api/user/:userId', userController.read);
    //api.patch('api/user/alterar-dados/:userId', userController.update);
@@ -15,4 +16,5 @@ module.exports = (api) => {
    api.get('/api/avaliacao/:avaliacaoId', avaliacaoController.read);
    api.get('/api/avaliacoes', avaliacaoController.list);
    api.get('/api/avaliacoes/localidade/:localId', avaliacaoController.readByLocalidade);
+   api.put('/api/avaliacao/editar/:avaliacaoId', avaliacaoController.update);
 };

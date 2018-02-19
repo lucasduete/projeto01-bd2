@@ -52,5 +52,27 @@ module.exports = {
             .all()
             .then(success => res.status(200).send(success))
             .catch(error => res.status(400).send(error));
+    },
+
+    update(req, res){
+        return Avaliacao
+            .findById(req.params.avaliacaoId)
+            .then(success => {
+                if(!success){
+                    return res.status(404).send({
+                        message: 'Avaliacao Not Found',
+                    });
+                }
+                return success
+                    .update({
+                        nota: req.body.nota || success.nota,
+                        comentario: req.body.comentario || success.comentario,
+                        userId: req.body.userId || success.userId,
+                        localidadeId: req.body.localidadeId || success.localidadeId
+                    })
+                    .then(() => res.status(200).send(success))
+                    .catch(error => res.status(400).send(error));
+            })
+            .catch(error => res.status(400).send(error));
     }
 }

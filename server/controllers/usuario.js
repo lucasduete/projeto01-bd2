@@ -1,6 +1,26 @@
 let Usuario = require('../models').Usuario;
 
 module.exports = {
+    login(req, res){
+        return Usuario
+            .find({
+                where: {
+                    email: req.headers.email,
+                    senha: req.headers.senha
+                }
+            })
+            .then(success => {
+                console.log("encontrou");
+                if(!success){
+                    return res.satatus(404).send({
+                        message: "Usuário não encontrado",
+                    });
+                }
+                return res.status(200).send(success);
+            })
+            .catch(error => res.status(400).send(error));
+    },
+
     create(req, res){
         return Usuario
             .create({
