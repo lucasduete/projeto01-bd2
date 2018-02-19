@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html data-ng-app="projetoBD">
+	<head>
+		
+		<title>Home</title>
+		
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" type="text/css" href="asserts/css/index.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/divMap.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/inputSearchBox.css">
+		<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
+	</head>
+
+	<body ng-controller="LocalController as Local">
+
+		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
+		<div id="map"></div>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" async defer></script>
+		<script type="text/javascript">
+			angular.module('projetoBD', [])
+				.controller('LocalController', LocalController);
+
+			function LocalController() {
+				var vm = this;
+
+				vm.chave =  "AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q";
+		      }
+
+		    function initMap() {
+        		let map = new google.maps.Map(document.getElementById('map'), {
+          			center: {lat: -6.887860, lng: -38.559366},
+          			zoom: 16
+        		});
+	      		
+        		getLocationFromBrowser(map);
+
+		        let searchBox = document.getElementById('searchBox');
+		        setSearchBox(searchBox, map);
+	        };
+		</script>
+	</body>
+</html>
