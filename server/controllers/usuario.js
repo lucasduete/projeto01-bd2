@@ -5,8 +5,8 @@ module.exports = {
         return Usuario
             .find({
                 where: {
-                    email: req.headers.email,
-                    senha: req.headers.senha
+                    email: req.body.email,
+                    senha: req.body.senha
                 }
             })
             .then(success => {
