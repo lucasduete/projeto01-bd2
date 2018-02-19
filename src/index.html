@@ -105,7 +105,7 @@
 			  		$http({
 				    	url: 'http://localhost:3000/api/login',
 				    	data: credenciais,
-				    	method: 'GET'
+				    	method: 'POST'
 			  		}).then(function (success) {
 			  				let data = success.data;
 				  			console.log('Data: ', data);
