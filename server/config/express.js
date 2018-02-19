@@ -17,7 +17,7 @@ let router = express.Router();
 routes(api);
 
 //cors
-router.use(function(req, res, next) {
+api.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	next();
 });
