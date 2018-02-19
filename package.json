@@ -19,10 +19,11 @@
   },
   "homepage": "https://github.com/aguirresabino/projeto01-bd2#readme",
   "dependencies": {
-    "express": "~4.16.2",
-    "pg": "~7.4.1",
     "body-parser": "~1.18.2",
+    "cors": "^2.8.4",
+    "express": "~4.16.2",
     "morgan": "~1.9.0",
+    "pg": "~7.4.1",
     "pg-hstore": "~2.3.2",
     "sequelize": "~4.33.4"
   },
