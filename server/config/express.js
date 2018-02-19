@@ -8,7 +8,11 @@ let routes = require('../routes');
 let api = express();
 
 api.use(logger('dev'));
-api.use(cors());
+
+api.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	next();
+});
 
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({ extended: false }));
