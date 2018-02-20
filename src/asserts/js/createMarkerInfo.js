@@ -12,8 +12,8 @@ function createMarkerInfo(marcador, map) {
     icone_url = 'http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_green.png';
   } else if (nota <= 7) {
     icone_url = 'http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_orange.png';
-  } else (nota <= 10) {
-    icone_url = 'http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_red.png;
+  } else if (nota <= 10) {
+    icone_url = 'http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_red.png';
   }
 
   let marker = new google.maps.Marker({
