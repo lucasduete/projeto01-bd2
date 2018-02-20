@@ -93,8 +93,16 @@
                 let data = success.data;
                 console.log('Data: ', data);
 
-                swal("Sucesso", "Novo Local Salvo com Sucesso", "success");
-                location.href="ome.html";                
+                swal({
+                  title: "Sucesso",
+                  text: "Nova Localidade Cadastrada Com Sucesso!",
+                  icon: "success",
+                  buttons: {"Ok" : true},
+                })
+                .then((value) => {
+                  location.href = "home.html";
+                });
+
                },function (error){
                   swal("Falha ao Salvar", "Por Favor, verifique os Dados e Tente Novamente.","error");
                   console.log('Erro: ', error);
