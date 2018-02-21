@@ -8,8 +8,7 @@ function setSearchBox(input, map) {
 	map.addListener('bounds_changed', function() {
 		searchBox.setBounds(map.getBounds());
 	});
-
-	var markers = [];
+	
 	// Escuta o Event disparado quando o usuário seleciona uma resultado 
 		// e recupera mais detalhes para esse local.
 	searchBox.addListener('places_changed', function() {
@@ -19,34 +18,13 @@ function setSearchBox(input, map) {
 	    	return;
 	  	}
 
-	  	// Limpa os Outros Marcadores.
-	  	markers.forEach(function(marker) {
-	        marker.setMap(null);
-	  	});
-	  	markers = [];
-
-	  	// Para cada lugar, pegue o ícone, o nome e a localização.
+	  	// Para cada lugar e a localização.
 	  	var bounds = new google.maps.LatLngBounds();
 	  	places.forEach(function(place) {
 	        if (!place.geometry) {
 	    	  	console.log("Returned place contains no geometry");
 	      		return;
 	   		}
-	    	var icon = {
-	      		url: place.icon,
-	      		size: new google.maps.Size(71, 71),
-	      		origin: new google.maps.Point(0, 0),
-	        	anchor: new google.maps.Point(17, 34),
-	      		scaledSize: new google.maps.Size(25, 25)
-	    	};
-
-	    	// Cria um Marcador para cada Lugar.
-	    	markers.push(new google.maps.Marker({
-	            map: map,
-	      		icon: icon,
-	      		title: place.name,
-	      		position: place.geometry.location
-	    	}));
 
 	    	if (place.geometry.viewport) {
 	      		// Somente Geocode (geometria) tem viewport
