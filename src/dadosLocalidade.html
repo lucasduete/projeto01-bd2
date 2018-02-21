@@ -146,7 +146,6 @@
 
               document.getElementById("nome").value = data.nome;
               document.getElementById("descricao").value = data.descricao;
-              document.getElementById("nota").value = data.nota;
 
              },function (error){
                 console.log('Erro: ', error);
@@ -161,6 +160,18 @@
               console.log('Avaliacoes: ', data);
 
               vm.avaliacoes = data;
+
+              //Calcula a Nota Total
+              var aux = 0;
+              var notaTotal = 0;
+
+              for (avaliacao of data) {
+                  aux++;
+                  notaTotal += avaliacao.nota;
+              };
+
+              notaTotal = notaTotal/aux;
+              document.getElementById("nota").value = notaTotal;
 
              },function (error){
                 console.log('Erro: ', error);
