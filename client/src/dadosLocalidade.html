@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html ng-app="projetoBD">
+  <head>
+    <title></title>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+    <script type="text/javascript" src="asserts/js/createMarkerForm.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+
+    
+  </head>
+  <body ng-controller="LocalController as Local" ng-init="Local.loadInputs()" class="light-green lighten-5">
+
+    <div class="container" style="margin-top: 3%;">
+      <div class="row">
+        <div class="col s12 m8 l8 offset-l2 offset-l2">
+          <div class="card-panel">
+            <h4 class="header2 flow-text" style="margin-left: 5%;">Dados da Localidade</h4>
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix" style="margin-top: 1%;">spellcheck</i>
+                    <input id="nome" class="validate valid" disabled type="text">
+                    <label for="nome" class="active">Nome</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix" style="margin-top: 1%;">room</i>
+                    <input id="descricao" class="validate invalid" disabled type="text">
+                    <label for="descricao" class="active">Descrição</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix" style="margin-top: 1%;">star_rate</i>
+                    <input id="nota" disabled type="number" max="10" min="0">
+                    <label for="nota" class="active">Nota Total</label>
+                  </div>
+                  <div class="input-field col s6 m6 l6">
+                    <i class="material-icons prefix" style="margin-top: 1%;">stars</i>
+                    <input id="myNota" class="validate invalid" required type="number" max="10" min="0">
+                    <label for="myNota" class="active">Sua Nota</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix" style="margin-top: 1%;">comment</i>
+                    <input id="myComentario" class="validate invalid" required type="text">
+                    <label for="myComentario" class="active">Seu Comentário</label>
+                  </div>
+                </div>
+                <div class="row right">
+                  <div class="row">
+                    <div class="input-field col s12 right">
+                      <button class="waves-effect waves-light btn" ng-click="Local.comentarLocal()"><i class="material-icons right">done_all</i>Avaliar</button>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12 m8 l8 offset-l2 offset-l2">
+          <div class="card-panel">
+            <h5 class="flow-text">Comentários</h5>
+            <div class="row">
+              <div class="row" ng-repeat="avaliacao in Local.avaliacoes">
+                <div class="input-field col s8 m8 l8">
+                  <i class="material-icons prefix" style="margin-top: 1%;">comment</i>
+                  <input id="comentario" class="validate invalid" disabled type="text" value="{{avaliacao.comentario}}">
+                  <label for="comentario" class="active"></label>
+                </div>
+                <div class="input-field col s4 m4 l4">
+                  <i class="material-icons prefix" style="margin-top: 1%;">star_rate</i>
+                  <input id="avaliacaoNota" class="validate invalid" disabled type="number" max="10" min="0" value="{{avaliacao.nota}}">
+                  <label for="nota" class="active">Nota da Avaliacao</label>
+                </div>
+              </div>
+            </div>    
+          </div> 
+        </div>
+      </div>
+
+    </div>  
+
+    <div id="map" style="width: 85%; height: 80%; margin: 0 auto"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+   <!--  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&callback=initMap"></script> -->
+    <script type="text/javascript"> 
+      angular.module('projetoBD', [])
+        .controller('LocalController', LocalController);
+
+        var map;
+        var coordenadas = JSON.parse(localStorage.coordenadas);
+        var usuario = JSON.parse(localStorage.usuario);
+        var idLocal = localStorage.idLocal;
+        var avaliacaoId;
+
+        var newAvaliation = true;
+        
+        usuario = usuario.id;
+
+        function LocalController($http) {
+          var vm = this;
+
+          vm.comentarLocal = function comentarLocal() {
+
+            let avaliacao = {
+              nota: document.getElementById('myNota').value,
+              comentario: document.getElementById('myComentario').value,
+              userId: usuario,
+              localidadeId: idLocal
+            };
+
+            //A variavel newAvaliation é um boolean por default FALSE, 
+              //Quando Invocada a Função LOADINPUTS() na hora de carregar os comentários
+              //Se tiver um Comentario e uma Nota deste usuario entao a variavel então 
+              //NAO É UMA NOVA AVALIACAO, logo é a edição de uma avaliação ja feita,
+              //caso não haja um comentario e uma nota do usuario para esta avaliacao
+              //entao a variavel nunca muda de valor ficando false, nesse caso chama-se o
+              //metodo de editar avaliacao da API
+
+            if (newAvaliation === false) {
+              console.log('entrou false');
+              //Edita uma Avaliacao ja que newAvaliation é false
+              $http({
+                url: 'http://localhost:3000/api/avaliacao/editar/' + avaliacaoId,
+                data: avaliacao,
+                method: 'PUT'
+              }).then(function (success) {
+                let data = success.data;
+                console.log('Avalicao Editada com sucesso, data é : ', data);
+
+                swal({
+                  title: "Sucesso",
+                  text: "Avaliação Editada Com Sucesso!",
+                  icon: "success",
+                  buttons: {"Ok" : true},
+                })
+                .then((value) => {
+                  location.href="home.html"; 
+                });
+          
+               },function (error) {
+                  swal("Falha ao Editar", "Não Foi Possivel Editar sua Avaliação, verifique os Dados e Tente Novamente.", "error");
+                  console.log('Erro: ', error);
+               });
+            } else if(newAvaliation === true) {
+              //Adiciona nova Avaliação por newAvaliation é true
+              console.log('entrou true');
+              $http({
+                url: 'http://localhost:3000/api/avaliacao/avaliar',
+                data: avaliacao,
+                method: 'POST'
+              }).then(function (success) {
+                let data = success.data;
+                console.log('Avalicao Cadastrada com Sucesso, data é : ', data);
+
+                swal({
+                  title: "Sucesso",
+                  text: "Avaliação Salva Com Sucesso!",
+                  icon: "success",
+                  buttons: {"Ok" : true},
+                })
+                .then((value) => {
+                  location.href="home.html"; 
+                });
+
+               },function (error) {
+                  swal("Falha ao Salvar", "Não Foi Possivel Salvar sua Avaliação, verifique os Dados e Tente Novamente.", "error");
+                  console.log('Erro: ', error);
+               });
+            };
+
+          };  
+
+          vm.loadInputs = function loadInputs() {
+
+            //Carrega Inputs de Nome, Descricao e Nota
+
+            $http({
+              url: 'http://localhost:3000/api/localidade/' + idLocal,
+              method: 'GET'
+            }).then(function (success) {
+              let data = success.data;
+              console.log('Data: ', data);
+
+              document.getElementById("nome").value = data.nome;
+              document.getElementById("descricao").value = data.descricao;
+
+             },function (error){
+                swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+                console.log('Erro: ', error);
+             });
+
+            //Carrega Comentários
+            $http({
+              url: 'http://localhost:3000/api/avaliacoes/localidade/' + idLocal,
+              method: 'GET'
+            }).then(function (success) {
+              let data = success.data;
+              console.log('Avaliacoes: ', data);
+
+              vm.avaliacoes = data;
+
+              //Calcula a Nota Total e Setta a Avaliação do Usuario
+              var aux = 0;
+              var notaTotal = 0;
+
+              for (avaliacao of data) {
+                  aux++;
+                  notaTotal += avaliacao.nota;
+                  if (avaliacao.userId) {
+                    avaliacaoId = avaliacao.id;
+                    newAvaliation = false;
+                    document.getElementById("myNota").value = avaliacao.nota;
+                    document.getElementById("myComentario").value = avaliacao.comentario;
+                    avaliacoes = avaliacoes.filter(function(item) { 
+                        return item !== avaliacao;
+                    })
+                  }
+              };
+
+              notaTotal = notaTotal/aux;
+
+              if(Number.isNaN(notaTotal))
+                document.getElementById("nota").value = 0;
+              else
+                document.getElementById("nota").value = notaTotal;
+
+             },function (error) {
+                swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+                console.log('Erro: ', error);
+             });
+
+          };
+        }
+        LocalController.$inject = ['$http'];
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: coordenadas,
+          zoom: 16,
+          mapTypeId: 'roadmap'
+        });
+
+      }
+
+    </script>
+  </body>
+</html>

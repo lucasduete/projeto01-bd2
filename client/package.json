@@ -1,8 +1,13 @@
 {
   "name": "projeto01-bd2",
   "version": "1.0.0",
+<<<<<<< HEAD:package.json
   "description": "Projeto para a dicisplina de Banco de Dados II do IFPB",
   "main": "server.js",
+=======
+  "description": "Projeto de Banco de dados 2",
+  "main": "index.html",
+>>>>>>> 074b67d2a7ea062eb035f77a2f99ecb68da9d4fa:client/package.json
   "scripts": {
     "start": "nodemon server.js",
     "make-bd": "sequelize db:migrate",
@@ -19,6 +24,7 @@
   },
   "homepage": "https://github.com/aguirresabino/projeto01-bd2#readme",
   "dependencies": {
+<<<<<<< HEAD:package.json
     "body-parser": "~1.18.2",
     "cors": "^2.8.4",
     "express": "~4.16.2",
@@ -32,5 +38,10 @@
     "express-generator": "~4.15.5",
     "nodemon": "~1.15.0",
     "sequelize-cli": "~4.0.0"
+=======
+    "bower": "^1.8.2",
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1"
+>>>>>>> 074b67d2a7ea062eb035f77a2f99ecb68da9d4fa:client/package.json
   }
 }
