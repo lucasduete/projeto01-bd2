@@ -7,7 +7,9 @@ let helmet = require('helmet');
 let api = express();
 
 api.use(cors({
-	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+	origin: ["http://localhost:8080"],
+	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	allowedHeaders: ['Content-Type', 'Authorization']
 }));
 api.use(logger('dev'));
 api.use(helmet());
