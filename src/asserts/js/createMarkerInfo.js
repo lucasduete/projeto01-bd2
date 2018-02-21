@@ -25,8 +25,6 @@ function createMarkerInfo(marcador, map) {
       title: marcador.nome
   });
 
-  //localStorage.idLocal = {{local.id}}
-
   let infowindow = new google.maps.InfoWindow({
     content: infoBox,
     maxWidth: 250
@@ -35,6 +33,7 @@ function createMarkerInfo(marcador, map) {
   marker.addListener('click', function() {
     infowindow.open(map, marker);
     localStorage.idLocal = marcador.id;
+    localStorage.coordenadas = JSON.stringify(coordenadas);
   });
 
 };
