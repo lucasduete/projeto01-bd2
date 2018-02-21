@@ -15,7 +15,7 @@
 	</head>
 
 
-	<body ng-controller="LocalController as Local" ng-init="Local.loadMarkers()" class="light-green lighten-5">
+	<body ng-controller="LocalController as Local" ng-init="Local.loadMarkers()"class="light-green lighten-5">
 
 		<div class="container" ng-controller="UserController as User">
 	        <div class="row">
@@ -92,6 +92,7 @@
 				.controller('LocalController', LocalController);
 
 			var map;
+			var markers = [];
 
 			function UserController($http) {
 				var vm = this;
@@ -125,42 +126,42 @@
 
 
 			function LocalController($http) {
-					var vm = this;
+				var vm = this;
 
-					vm.loadMarkers = function loadMarkers() {
-				  		$http({
-					    	url: 'http://localhost:3000/api/localidades',
-					    	method: 'GET'
-				  		}).then(function (success) {
-				  			let data = success.data;
-				  			console.log('Data das Localidades: ', data);
-				    		
-				    		let markers = data;
-				    		for (marker of markers) {
-				    			$http({
-					    			url: 'http://localhost:3000/api/avaliacoes/localidade/media/' + marker.id,
-					    			method: 'GET'
-				  				}).then(function (success) {
-				  					let data = success.data;
-				  					console.log('Data com Média do Marker : ', data);
-				    		
-									marker.nota = data;
+				vm.loadMarkers = function loadMarkers() {
+			  		$http({
+				    	url: 'http://localhost:3000/api/localidades',
+				    	method: 'GET'
+			  		}).then(function (success) {
+			  			let data = success.data;
+			  			console.log('Data das Localidades: ', data);
+			    		
+			    		markers = data;
+			    		for (marker of markers) {
+			    			$http({
+				    			url: 'http://localhost:3000/api/avaliacoes/localidade/media/' + marker.id,
+				    			method: 'GET'
+			  				}).then(function (success) {
+			  					let data = success.data;
+			  					console.log('Data com Média do Marker : ', data);
+			    		
+								marker.nota = data;
 
-						    		createMarkerInfo(marker, map);
-						    		},function (error) {
-						    			swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
-						   				console.log('Erro: ', error);
-						   			});
-				    		};
-				    		
-						   },function (error) {
-						   		swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
-						   		console.log('Erro: ', error);
-						   });
-					}
-
+					    		createMarkerInfo(marker, map);
+					    		},function (error) {
+					    			//swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+					   				console.log('Erro: ', error);
+					   			});
+			    		};
+			    		
+					   },function (error) {
+					   		swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+					   		console.log('Erro: ', error);
+					   });
 				}
-				LocalController.$inject = ['$http'];
+
+			}
+			LocalController.$inject = ['$http'];
 
 		    function initMap() {
         		map = new google.maps.Map(document.getElementById('map'), {
