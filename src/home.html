@@ -81,7 +81,8 @@
 						   			});
 			    			});
 				    		
-						   },function (error){
+						   },function (error) {
+						   		swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
 						   		console.log('Erro: ', error);
 						   });
 					}
@@ -102,9 +103,18 @@
 				  		}).then(function (success) {
 				  			let data = success.data;
 				  			console.log('Data: ', data);
-
-				  			location.reload();				    		
-						   },function (error){
+				  			swal({
+			                  title: "Sucesso",
+			                  text: "Nova Localidade Cadastrada Com Sucesso!",
+			                  icon: "success",
+			                  buttons: {"Ok" : true},
+			                })
+			                .then((value) => {
+			                  location.reload();
+			                });
+		    		
+						   },function (error) {
+						   		swal("Falha ao Salvar", "Por Favor, verifique os Dados e Tente Novamente.","error");
 						   		console.log('Erro: ', error);
 						   });
 					}
