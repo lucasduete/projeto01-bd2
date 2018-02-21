@@ -25,20 +25,20 @@
                   <div class="input-field col s12">
                     <i class="material-icons prefix" style="margin-top: 1%;">spellcheck</i>
                     <input id="nome" class="validate valid" disabled type="text">
-                    <label for="first_name" class="active">Nome</label>
+                    <label for="nome" class="active">Nome</label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="input-field col s12">
                     <i class="material-icons prefix" style="margin-top: 1%;">room</i>
                     <input id="descricao" class="validate invalid" disabled type="text">
-                    <label for="email" class="active">Descrição</label>
+                    <label for="descricao" class="active">Descrição</label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="input-field col s6 m6 l6">
                     <i class="material-icons prefix" style="margin-top: 1%;">star_rate</i>
-                    <input id="nota" class="validate invalid" disabled type="number" max="10" min="0">
+                    <input id="nota" disabled type="number" max="10" min="0">
                     <label for="nota" class="active">Nota Total</label>
                   </div>
                   <div class="input-field col s6 m6 l6">
@@ -161,17 +161,25 @@
 
               vm.avaliacoes = data;
 
-              //Calcula a Nota Total
+              //Calcula a Nota Total e Setta a Avaliação do Usuario
               var aux = 0;
               var notaTotal = 0;
 
               for (avaliacao of data) {
                   aux++;
                   notaTotal += avaliacao.nota;
+                  if (avaliacao.userId) {
+                    document.getElementById("myNota").value = avaliacao.nota;
+                    document.getElementById("myComentario").value = avaliacao.comentario;
+                  }
               };
 
               notaTotal = notaTotal/aux;
-              document.getElementById("nota").value = notaTotal;
+
+              if(typeof notaTotal == 'NaN')
+                document.getElementById("nota").value = notaTotal;
+              else
+                document.getElementById("nota").value = 0;
 
              },function (error){
                 console.log('Erro: ', error);
