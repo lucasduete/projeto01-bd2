@@ -3,17 +3,11 @@
   <head>
 
     <title>Cadastro de Local</title>
-
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
 
-    <script type="text/javascript" src="asserts/js/createMarkerForm.js"></script>
+    <link rel="stylesheet" type="text/css" href="/asserts/components/materialize/dist/css/materialize.min.css">
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
     
   </head>
   <body ng-controller="LocalController as Local" class="light-green lighten-5">
@@ -56,8 +50,13 @@
 
     <div id="map" style="width: 85%; height: 80%; margin: 0 auto"></div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&callback=initMap"></script>
+    <script src="/asserts/components/jquery/dist/jquery.js"></script>
+		<script src="/asserts/components/materialize/dist/js/materialize.min.js"></script>
+    <script src="asserts/components/angular/angular.js"></script>
+
+    <script type="text/javascript" src="asserts/js/createMarkerForm.js"></script>
+
     <script type="text/javascript">
       angular.module('projetoBD', [])
         .controller('LocalController', LocalController);
