@@ -29,6 +29,24 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    readByNome(req, res){
+        return Localidade
+            .find({
+                where: {
+                    nome: req.body.nome
+                }
+            })
+            .then(success => {
+                if(!success){
+                    return res.status(404).send({
+                        message: 'Localidade Not Found'
+                    });
+                }
+                return res.status(200).send(success);
+            })
+            .catch(error => res.status(400).send(error));
+    },
+
     list(req, res){
         return Localidade
             .all()
