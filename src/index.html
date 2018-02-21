@@ -147,10 +147,10 @@
 			  					console.log('Data com Média do Marker : ', data);
 			    		
 								marker.nota = data.media;
-									
+
 					    		createMarkerInfo(marker, map);
 					    		},function (error){
-					    			//swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+					    			swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
 					   				console.log('Erro: ', error);
 					   			});
 		    			});
