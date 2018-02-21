@@ -47,6 +47,42 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    /* readMediaByLocalidade(req, res){
+        return Avaliacao
+            .find(
+                {
+                    attributes: ['nota'],
+                    where: {
+                        localidadeId: req.params.localId
+                    }
+                }
+            )
+            .then(success => {
+                if(!success){
+                    return res.satatus(404).send({
+                        message: "Sem avaliações para esta localidade",
+                    });
+                }            
+                let soma = 0;
+                let quantidade = 0;
+                console.log(JSON.parse(success.dataValues));
+                let nota = JSON.parse(success.dataValues);
+                for(avaliacao in success.dataValues){
+                    let nota = JSON.parse(avaliacao);
+                    console.log(nota);
+                    for(nota in avaliacao){
+                        console.log(nota);
+                    }
+                     console.log(success.dataValues);
+                    soma = Number(soma) + 1;
+                    quantidade = Number(quantidade) + Number(avaliacao);
+                }
+
+                return res.status(200).send({media: soma / quantidade});
+            })
+            .catch(error => res.status(400).send(error));
+    }, */
+
     list(req, res){
         return Avaliacao
             .all()

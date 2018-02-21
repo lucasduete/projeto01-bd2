@@ -16,5 +16,6 @@ module.exports = (api) => {
    api.get('/api/avaliacao/:avaliacaoId', avaliacaoController.read);
    api.get('/api/avaliacoes', avaliacaoController.list);
    api.get('/api/avaliacoes/localidade/:localId', avaliacaoController.readByLocalidade);
+   /* api.get('/api/avaliacoes/localidade/media/:localId', avaliacaoController.readMediaByLocalidade); */
    api.put('/api/avaliacao/editar/:avaliacaoId', avaliacaoController.update);
 };
