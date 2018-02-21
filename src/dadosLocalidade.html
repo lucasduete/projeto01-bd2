@@ -104,6 +104,8 @@
         var coordenadas = JSON.parse(localStorage.coordenadas);
         var usuario = JSON.parse(localStorage.usuario);
         var idLocal = localStorage.idLocal;
+
+        var newAvaliation = true;
         
         usuario = usuario.id;
 
@@ -119,11 +121,17 @@
               localidadeId: idLocal
             };
 
-            //Se tiver um Comentario e uma Nota Entao deve atualizar
-              //se nao deve adicionar nova avaliacao
+            //A variavel newAvaliation é um boolean por default FALSE, 
+              //Quando Invocada a Função LOADINPUTS() na hora de carregar os comentários
+              //Se tiver um Comentario e uma Nota deste usuario entao a variavel então 
+              //NAO É UMA NOVA AVALIACAO, logo é a edição de uma avaliação ja feita,
+              //caso não haja um comentario e uma nota do usuario para esta avaliacao
+              //entao a variavel nunca muda de valor ficando false, nesse caso chama-se o
+              //metodo de editar avaliacao da API
 
-            if (document.getElementById("myNota").value === ""
-                    document.getElementById("myComentario").value === "") {
+            if (newAvaliation === false) {
+              console.log('entrou false');
+              //Edita uma Avaliacao ja que newAvaliation é false
               $http({
                 url: 'http://localhost:3000/api/avaliacao/editar',
                 data: avaliacao,
@@ -132,12 +140,13 @@
                 let data = success.data;
                 console.log('Avalicao Editada com sucesso, data é : ', data);
 
-                location.href="home.html";           
+                //location.href="home.html";           
                },function (error){
                   console.log('Erro: ', error);
                });
-            } else {
-              //Adiciona nova Avaliação
+            } else if(newAvaliation === true) {
+              //Adiciona nova Avaliação por newAvaliation é true
+              console.log('entrou true');
               $http({
                 url: 'http://localhost:3000/api/avaliacao/avaliar',
                 data: avaliacao,
@@ -146,7 +155,7 @@
                 let data = success.data;
                 console.log('Avalicao Cadastrada com Sucesso, data é : ', data);
 
-                location.href="home.html";           
+                //location.href="home.html";           
                },function (error){
                   console.log('Erro: ', error);
                });
@@ -190,6 +199,7 @@
                   aux++;
                   notaTotal += avaliacao.nota;
                   if (avaliacao.userId) {
+                    newAvaliation = false;
                     document.getElementById("myNota").value = avaliacao.nota;
                     document.getElementById("myComentario").value = avaliacao.comentario;
                   }
@@ -198,9 +208,9 @@
               notaTotal = notaTotal/aux;
 
               if(typeof notaTotal == 'NaN')
-                document.getElementById("nota").value = notaTotal;
-              else
                 document.getElementById("nota").value = 0;
+              else
+                document.getElementById("nota").value = notaTotal;
 
              },function (error){
                 console.log('Erro: ', error);
