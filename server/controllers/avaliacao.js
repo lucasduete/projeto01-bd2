@@ -29,7 +29,7 @@ module.exports = {
 
     readByLocalidade(req, res){
         return Avaliacao
-            .find(
+            .findAll(
                 {
                     where: {
                         localidadeId: req.params.localId
