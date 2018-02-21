@@ -112,26 +112,47 @@
 
           vm.comentarLocal = function comentarLocal() {
 
-              let avaliacao = {
-                nota: document.getElementById('myNota').value,
-                comentario: document.getElementById('myComentario').value,
-                userId: usuario,
-                localidadeId: idLocal
-              };
+            let avaliacao = {
+              nota: document.getElementById('myNota').value,
+              comentario: document.getElementById('myComentario').value,
+              userId: usuario,
+              localidadeId: idLocal
+            };
 
+            //Se tiver um Comentario e uma Nota Entao deve atualizar
+              //se nao deve adicionar nova avaliacao
+
+            if (document.getElementById("myNota").value === ""
+                    document.getElementById("myComentario").value === "") {
+              $http({
+                url: 'http://localhost:3000/api/avaliacao/editar',
+                data: avaliacao,
+                method: 'POST'
+              }).then(function (success) {
+                let data = success.data;
+                console.log('Avalicao Editada com sucesso, data é : ', data);
+
+                location.href="home.html";           
+               },function (error){
+                  console.log('Erro: ', error);
+               });
+            } else {
+              //Adiciona nova Avaliação
               $http({
                 url: 'http://localhost:3000/api/avaliacao/avaliar',
                 data: avaliacao,
                 method: 'POST'
               }).then(function (success) {
                 let data = success.data;
-                console.log('Data: ', data);
+                console.log('Avalicao Cadastrada com Sucesso, data é : ', data);
 
                 location.href="home.html";           
                },function (error){
                   console.log('Erro: ', error);
                });
-          };
+            };
+
+          };  
 
           vm.loadInputs = function loadInputs() {
 
@@ -186,8 +207,8 @@
              });
 
           };
-
         }
+        LocalController.$inject = ['$http'];
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
