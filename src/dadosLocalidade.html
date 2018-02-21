@@ -104,6 +104,7 @@
         var coordenadas = JSON.parse(localStorage.coordenadas);
         var usuario = JSON.parse(localStorage.usuario);
         var idLocal = localStorage.idLocal;
+        var avaliacaoId;
 
         var newAvaliation = true;
         
@@ -133,15 +134,25 @@
               console.log('entrou false');
               //Edita uma Avaliacao ja que newAvaliation é false
               $http({
-                url: 'http://localhost:3000/api/avaliacao/editar',
+                url: 'http://localhost:3000/api/avaliacao/editar/' + avaliacaoId,
                 data: avaliacao,
-                method: 'POST'
+                method: 'PUT'
               }).then(function (success) {
                 let data = success.data;
                 console.log('Avalicao Editada com sucesso, data é : ', data);
 
-                //location.href="home.html";           
-               },function (error){
+                swal({
+                  title: "Sucesso",
+                  text: "Avaliação Editada Com Sucesso!",
+                  icon: "success",
+                  buttons: {"Ok" : true},
+                })
+                .then((value) => {
+                  location.href="home.html"; 
+                });
+          
+               },function (error) {
+                  swal("Falha ao Editar", "Não Foi Possivel Editar sua Avaliação, verifique os Dados e Tente Novamente.", "error");
                   console.log('Erro: ', error);
                });
             } else if(newAvaliation === true) {
@@ -155,8 +166,18 @@
                 let data = success.data;
                 console.log('Avalicao Cadastrada com Sucesso, data é : ', data);
 
-                //location.href="home.html";           
-               },function (error){
+                swal({
+                  title: "Sucesso",
+                  text: "Avaliação Salva Com Sucesso!",
+                  icon: "success",
+                  buttons: {"Ok" : true},
+                })
+                .then((value) => {
+                  location.href="home.html"; 
+                });
+
+               },function (error) {
+                  swal("Falha ao Salvar", "Não Foi Possivel Salvar sua Avaliação, verifique os Dados e Tente Novamente.", "error");
                   console.log('Erro: ', error);
                });
             };
@@ -178,6 +199,7 @@
               document.getElementById("descricao").value = data.descricao;
 
              },function (error){
+                swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
                 console.log('Erro: ', error);
              });
 
@@ -199,6 +221,7 @@
                   aux++;
                   notaTotal += avaliacao.nota;
                   if (avaliacao.userId) {
+                    avaliacaoId = avaliacao.id;
                     newAvaliation = false;
                     document.getElementById("myNota").value = avaliacao.nota;
                     document.getElementById("myComentario").value = avaliacao.comentario;
@@ -207,12 +230,13 @@
 
               notaTotal = notaTotal/aux;
 
-              if(typeof notaTotal == 'NaN')
+              if(Number.isNaN(notaTotal))
                 document.getElementById("nota").value = 0;
               else
                 document.getElementById("nota").value = notaTotal;
 
-             },function (error){
+             },function (error) {
+                swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
                 console.log('Erro: ', error);
              });
 
