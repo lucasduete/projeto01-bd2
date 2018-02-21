@@ -50,14 +50,14 @@
                 <div class="row">
                   <div class="input-field col s12">
                     <i class="material-icons prefix" style="margin-top: 1%;">comment</i>
-                    <input id="comentario" class="validate invalid" required type="text">
-                    <label for="comentario" class="active">Comentário</label>
+                    <input id="myComentario" class="validate invalid" required type="text">
+                    <label for="myComentario" class="active">Seu Comentário</label>
                   </div>
                 </div>
                 <div class="row right">
                   <div class="row">
                     <div class="input-field col s12 right">
-                      <button class="waves-effect waves-light btn" ng-click="Local.comentarLocal()"><i class="material-icons right">done_all</i>Comentar</button>
+                      <button class="waves-effect waves-light btn" ng-click="Local.comentarLocal()"><i class="material-icons right">done_all</i>Avaliar</button>
                       </button>
                     </div>
                   </div>
@@ -70,12 +70,23 @@
 
       <div class="row">
         <div class="col s12 m8 l8 offset-l2 offset-l2">
-          <h5 class="flow-text">Comentários</h5>
           <div class="card-panel">
-              <i class="material-icons prefix" style="margin-top: 1%;">comment</i>
-              <input id="comentario" class="validate invalid" required type="text">
-              <label for="comentario" class="active">Comentário</label>
-           </div> 
+            <h5 class="flow-text">Comentários</h5>
+            <div class="row">
+              <div class="row" ng-repeat="avaliacao in Local.avaliacoes">
+                <div class="input-field col s8 m8 l8">
+                  <i class="material-icons prefix" style="margin-top: 1%;">comment</i>
+                  <input id="comentario" class="validate invalid" disabled type="text" value="{{avaliacao.comentario}}">
+                  <label for="comentario" class="active"></label>
+                </div>
+                <div class="input-field col s4 m4 l4">
+                  <i class="material-icons prefix" style="margin-top: 1%;">star_rate</i>
+                  <input id="avaliacaoNota" class="validate invalid" disabled type="number" max="10" min="0" value="{{avaliacao.nota}}">
+                  <label for="nota" class="active">Nota da Avaliacao</label>
+                </div>
+              </div>
+            </div>    
+          </div> 
         </div>
       </div>
 
@@ -102,8 +113,8 @@
           vm.comentarLocal = function comentarLocal() {
 
               let avaliacao = {
-                nota: document.getElementById('nota').value,
-                comentario: document.getElementById('comentario').value,
+                nota: document.getElementById('myNota').value,
+                comentario: document.getElementById('myComentario').value,
                 userId: usuario,
                 localidadeId: idLocal
               };
@@ -116,13 +127,16 @@
                 let data = success.data;
                 console.log('Data: ', data);
 
-                location.href="home.html";                
+                location.href="home.html";           
                },function (error){
                   console.log('Erro: ', error);
                });
           };
 
           vm.loadInputs = function loadInputs() {
+
+            //Carrega Inputs de Nome, Descricao e Nota
+
             $http({
               url: 'http://localhost:3000/api/localidade/' + idLocal,
               method: 'GET'
@@ -137,6 +151,21 @@
              },function (error){
                 console.log('Erro: ', error);
              });
+
+            //Carrega Comentários
+            $http({
+              url: 'http://localhost:3000/api/avaliacoes/localidade/' + idLocal,
+              method: 'GET'
+            }).then(function (success) {
+              let data = success.data;
+              console.log('Avaliacoes: ', data);
+
+              vm.avaliacoes = data;
+
+             },function (error){
+                console.log('Erro: ', error);
+             });
+
           };
 
         }
