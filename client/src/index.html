@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html data-ng-app="projetoBD">
+	<head>
+		<title>Home</title>
+		
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+		<link rel="stylesheet" type="text/css" href="asserts/css/divMap.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/inputSearchBox.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/login.css">
+		<link rel="stylesheet" type="text/css" href="/asserts/components/materialize/dist/css/materialize.min.css">
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	</head>
+
+
+	<body ng-controller="LocalController as Local" ng-init="Local.loadMarkers()"class="light-green lighten-5">
+
+		<div class="container" ng-controller="UserController as User">
+	        <div class="row">
+	            <div class="col s12 m6 l6">
+	                
+	                <form class="login-form">
+	                    <div class="card">
+	                        <div class="card-image">
+	                            <img src="asserts/img/login-image.jpg">
+	                            <span class="card-title">
+	                            <h2>Login</h2>
+	                            <h6>MapsBoladu Enterprise</h6>
+	                        </span>
+	                        </div>
+	                        <div class="card-content">
+	                            <div class="input-field">
+	                                <input class="validate" id="email" type="email" required>
+	                                <label for="email">Email</label>
+	                            </div>
+
+	                            <div class="row">
+	                                <div class="col s12 m7 l8">
+	                                    <div class="input-field">
+	                                        <input id="password" type="password" required>
+	                                        <label for="password">Senha</label>
+	                                    </div>
+	                                </div>
+	                                <div class="col s12 m4 l3">
+	                                    <div class="input-field">
+	                                        <input type="checkbox" id="remember-me" />
+	                                        <label for="remember-me">Lembrar</label>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="card-action blue-grey lighten-3">
+	                            <div class="center-align">
+	                                <button data-ng-click="User.login()" class="btn blue-grey darken-1"><i class="material-icons left">vpn_key</i>Login</button>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </form>
+
+	                <div class="row">
+	                    <div class="col s4">
+	                        <a href="cadastroUsuario.html">Registrar</a>
+	                    </div>
+	                    <div class="col s8 right-align">
+	                        <a href="#" class="">Esqueci a senha</a>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col s12 m5 l5">
+	            	<div class="row" style="margin-top: 7%;">
+	            		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
+						<div id="map"></div>
+	            	</div>
+	            </div>
+	        </div>
+		</div>
+
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" async defer></script>
+		<script src="/asserts/components/jquery/dist/jquery.js"></script>
+		<script src="/asserts/components/materialize/dist/js/materialize.min.js"></script>
+		<script src="asserts/components/angular/angular.js"></script>
+
+    	<script src="asserts/js/getLocationFromBrowser.js"></script>
+    	<script src="asserts/js/setSearchBox.js"></script>
+    	<script src="asserts/js/createMarkerInfo.js"></script>
+
+		<script type="text/javascript">
+			angular.module('projetoBD', [])
+				.controller('UserController', UserController)
+				.controller('LocalController', LocalController);
+
+			var map;
+			let markers = [];
+
+			function UserController($http) {
+				let vm = this;
+
+				vm.login = function login() {
+					const credenciais = {
+						email: document.getElementById('email').value,
+						senha: document.getElementById('password').value
+					};
+		
+					console.log("email do user: " + credenciais.email);
+					console.log("senha do user: " + credenciais.senha);
+			  		$http({
+				    	url: 'http://localhost:3000/api/login',
+				    	data: credenciais,
+				    	method: 'POST'
+			  		}).then(function (success) {
+			  				let data = success.data;
+				  			console.log('Data: ', data);
+			    			localStorage.usuario = angular.toJson(data);
+
+			    			location.href="home.html";				    		
+						   },function (error) {
+						   		swal("Login Inválido", "Não Foi Possível Realizar o Login, Cheque seus Dados e Tente Novamente", "error");
+						   		console.log('Erro: ', error);
+						   });
+				}
+
+			}
+			UserController.$inject = ['$http'];
+
+			var vm;
+			function LocalController($http) {
+				vm = this;
+
+				vm.loadMarkers = function loadMarkers() {
+			  		$http({
+				    	url: 'http://localhost:3000/api/localidades',
+				    	method: 'GET'
+			  		}).then(function (success) {
+			  			let data = success.data;
+			  			console.log('Data das Localidades: ', data);
+			    		
+			    		markers = data;			    	
+
+			  			markers.forEach(marker => {
+			    			$http({
+				    			url: 'http://localhost:3000/api/avaliacoes/localidade/media/' + marker.id,
+				    			method: 'GET'
+			  				}).then(function (success) {
+			  					let data = success.data;
+			  					console.log('Data com Média do Marker : ', data);
+			    		
+								marker.nota = data.media;
+
+					    		createMarkerInfo(marker, map);
+					    		},function (error){
+					    			swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+					   				console.log('Erro: ', error);
+					   			});
+		    			});
+
+					   },function (error) {
+					   		swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+					   		console.log('Erro: ', error);
+					   });
+				}
+
+				vm.readLocal = function(local){
+						$http({
+							url: 'http://localhost:3000/api/localidade',
+							method: 'POST',
+							data: {nome: local}
+						})
+						.then(function(success){
+							console.log(success.data);
+							let local = success.data;
+							map.setOptions({
+			          			center: {lat: -6.887860, lng: -38.559366},
+			          			zoom: 16,
+			          			mapTypeId: 'roadmap'
+			        		})
+						}, function(error){
+							console.log('error', error);
+						});
+					}
+
+			}
+			LocalController.$inject = ['$http'];
+
+		    function initMap() {
+        		map = new google.maps.Map(document.getElementById('map'), {
+          			center: {lat: -6.887860, lng: -38.559366},
+          			zoom: 16
+        		});
+
+        		getLocationFromBrowser(map);
+
+		        let searchBox = document.getElementById('searchBox');
+		        setSearchBox(searchBox, map);
+
+		        document.addEventListener('keydown', function(e) {
+				    e = e || window.event;
+				    let code = e.which || e.keyCode;
+
+				    if(code === 13){
+				    	vm.readLocal(searchBox.value);
+				    }
+				});
+	        };
+
+		    new google.maps.event.addDomListener(window, 'load', initMap);
+
+        	$(document).ready(function () {
+            	$('.modal-trigger').leanModal({
+                	ready: function () {
+            	        var map = document.getElementById("map");
+        	            google.maps.event.trigger(map, 'resize');
+    	            }
+	            });
+        	});				
+		</script>
+	</body>
+</html>

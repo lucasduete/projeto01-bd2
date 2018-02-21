@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html data-ng-app="projetoBD">
+	<head>
+		
+		<title>Home</title>
+		
+		<meta charset="UTF-8">
+
+		<link rel="stylesheet" type="text/css" href="asserts/css/index.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/divMap.css">
+		<link rel="stylesheet" type="text/css" href="asserts/css/inputSearchBox.css">
+		<link rel="stylesheet" type="text/css" href="/asserts/components/materialize/dist/css/materialize.min.css">
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	</head>
+
+	<body ng-controller="LocalController as Local" ng-init="Local.loadMarkers()">
+
+		<div class="container">
+			<div class="row">
+		        <div class="col s12 m8 l8 offset-l1 offset-l1">
+		          <div class="card-panel">
+		            <h4 class="header2 flow-text" style="margin-left: 5%;">Bem Vindo 
+		            	{{Local.usuario.nome}}, <i>{{Local.usuario.email}}</i>
+		            </h4>
+		            <button class="waves-effect waves-light teal btn right"><i class="material-icons right">exit_to_app</i><a href="index.html">Sair</a></button>
+		            <br>
+		           </div>		           
+		        </div>
+	      	</div>
+		</div>
+
+		<input id="searchBox" class="controls" type="text" placeholder="Digite para Encontrar">
+		<div id="map" style="width: 85%; height: 80%; margin: 0 auto"></div>
+
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA26N7U2JuMCMfu1u4IJKGtSP7286dE45Q&libraries=places&callback=initMap" defer></script>
+		<script src="/asserts/components/jquery/dist/jquery.js"></script>
+		<script src="/asserts/components/materialize/dist/js/materialize.min.js"></script>
+		<script src="asserts/components/angular/angular.js"></script>
+
+		<script type="text/javascript" src="asserts/js/getLocationFromBrowser.js"></script>
+		<script type="text/javascript" src="asserts/js/createMarkerInfo.js"></script>
+		<script type="text/javascript" src="asserts/js/setSearchBox.js"></script>
+
+		<script type="text/javascript">
+			angular.module('projetoBD', [])
+				.controller('LocalController', LocalController);
+
+				var map;
+				var vm;
+				var markerForm;
+
+				function LocalController($http) {
+					vm = this;
+
+					vm.usuario = JSON.parse(localStorage.usuario);
+
+					vm.loadMarkers = function loadMarkers() {
+						map.addListener('click', function(e) {
+          					createMarkerForm(e.latLng, map);
+        				});
+
+				  		$http({
+					    	url: 'http://localhost:3000/api/localidades',
+					    	method: 'GET'
+				  		}).then(function (success) {
+				  			let data = success.data;
+				  			console.log('Data: ', data);
+				    		
+				    		let markers = data;
+				    		markers.forEach(marker => {
+				    			$http({
+					    			url: 'http://localhost:3000/api/avaliacoes/localidade/media/' + marker.id,
+					    			method: 'GET'
+				  				}).then(function (success) {
+				  					let data = success.data;
+				  					console.log('Data com Média do Marker : ', data);
+				    		
+									marker.nota = data.media;
+
+						    		createMarkerInfo(marker, map);
+						    		},function (error){
+						    			swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+						   				console.log('Erro: ', error);
+						   			});
+			    			});
+				    		
+						   },function (error) {
+						   		swal("Erro", "Não Foi Possível Recuperar os Dados, Por favor Contate um Administrador", "error");
+						   		console.log('Erro: ', error);
+						   });
+					},
+
+					vm.readLocal = function(local){
+						$http({
+							url: 'http://localhost:3000/api/localidade',
+							method: 'POST',
+							data: {nome: local}
+						})
+						.then(function(success){
+							console.log(success.data);
+							let local = success.data;
+							map.setOptions({
+			          			center: {lat: -6.887860, lng: -38.559366},
+			          			zoom: 16,
+			          			mapTypeId: 'roadmap'
+			        		})
+						}, function(error){
+							console.log('error', error);
+						});
+					}
+
+					vm.createMarker = function createMarker() {
+						let marker = JSON.parse(localStorage.marcador);
+
+            			console.log(marker.longitude);
+            			console.log(marker.latitude);
+            			console.log(marker.nome);
+            			console.log(marker.descricao);
+            			console.log(marker);
+
+            			$http({
+					    	url: 'http://localhost:3000/api/localidade/cadastrar',
+					    	data: marker,
+					    	method: 'POST'
+				  		}).then(function (success) {
+				  			let data = success.data;
+				  			console.log('Data: ', data);
+				  			swal({
+			                  title: "Sucesso",
+			                  text: "Nova Localidade Cadastrada Com Sucesso!",
+			                  icon: "success",
+			                  buttons: {"Ok" : true},
+			                })
+			                .then((value) => {
+			                  location.reload();
+			                });
+		    		
+						   },function (error) {
+						   		swal("Falha ao Salvar", "Por Favor, verifique os Dados e Tente Novamente.","error");
+						   		console.log('Erro: ', error);
+						   });
+					}
+
+				}
+				LocalController.$inject = ['$http'];
+
+			function initMap() {
+        		map = new google.maps.Map(document.getElementById('map'), {
+          			center: {lat: -6.887860, lng: -38.559366},
+          			zoom: 16,
+          			mapTypeId: 'roadmap'
+        		});
+	      		
+        		getLocationFromBrowser(map);
+
+		        let searchBox = document.getElementById('searchBox');
+		        setSearchBox(searchBox, map);
+
+		        document.addEventListener('keydown', function(e) {
+				    e = e || window.event;
+				    let code = e.which || e.keyCode;
+
+				    if(code === 13){
+				    	vm.readLocal(searchBox.value);
+				    }
+				});
+	        };
+
+	        function createMarkerForm(coordenadas, map) {
+
+				let formBox = '<div id="content" style="width:330px;"><h5 class="flow-text">Cadastro de Marker</h5><input type="text" id="localNome" name="nomeLocal" placeholder="Nome do Local" required><div id="bodyFormContent"><p><input type="text" id="localDescricao" name="descricaoLocal" placeholder="Digite uma Descricao" required></p><p><button class="waves-effect waves-light red btn" style="margin-right:2%" onclick="localStorage.marcador = JSON.stringify({latitude: ' + coordenadas.lat() + ',longitude: ' + coordenadas.lng() + ',nome: document.getElementById(\'localNome\').value, descricao: document.getElementById(\'localDescricao\').value,nota: 0,id : 1});location.href=\'cadastrarLocalidade.html\'"><i class="material-icons right">menu</i>Nova Pagina</button><button onclick="localStorage.marcador = JSON.stringify({latitude: ' + coordenadas.lat() + ',longitude: ' + coordenadas.lng() + ',nome: document.getElementById(\'localNome\').value, descricao: document.getElementById(\'localDescricao\').value,nota: 0,id : 1}); callCreateMarker();" class="waves-effect waves-light btn"><i class="material-icons right">send</i>enviar</button></p></div></div>';
+
+				if (typeof markerForm !== 'undefined') {
+        			markerForm.setMap(null);
+    			};
+    			
+			    markerForm = new google.maps.Marker({
+			        position: coordenadas,
+			        map: map
+			    });
+
+			    let formwindow = new google.maps.InfoWindow({
+				    content: formBox,
+			        maxWidth: 330
+			    });
+
+			    markerForm.addListener('click', function() {
+			    	formwindow.open(map, markerForm);
+			    });
+
+			    map.panTo(coordenadas);
+			};
+
+			function callCreateMarker() {
+			    vm.createMarker();
+			}
+		</script>
+	</body>
+</html>

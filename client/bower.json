@@ -1,0 +1,25 @@
+{
+  "name": "projeto01-bd2",
+  "description": "Projeto de Banco de dados 2",
+  "main": "index.html",
+  "authors": [
+    "Aguirre Sabino",
+    "Lucas Duete"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/aguirresabino/projeto01-bd2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.9",
+    "angular-route": "^1.6.9",
+    "jquery": "^3.3.1",
+    "materialize": "^0.100.2",
+    "sweetalert": "^2.1.0"
+  }
+}
