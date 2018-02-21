@@ -38,7 +38,7 @@ build/Release
 
 # Dependency directories
 node_modules/
-asserts/
+asserts/components/
 jspm_packages/
 
 # Typescript v1 declaration files
