@@ -226,6 +226,9 @@
                     newAvaliation = false;
                     document.getElementById("myNota").value = avaliacao.nota;
                     document.getElementById("myComentario").value = avaliacao.comentario;
+                    avaliacoes = avaliacoes.filter(function(item) { 
+                        return item !== avaliacao;
+                    })
                   }
               };
 
