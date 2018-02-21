@@ -1,36 +1,36 @@
 {
-    "name": "projeto01-bd2",
-    "version": "1.0.0",
-    "description": "Projeto para a dicisplina de Banco de Dados II do IFPB",
-    "main": "server.js",
-    "scripts": {
-      "start": "nodemon server.js",
-      "make-bd": "sequelize db:migrate",
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/aguirresabino/projeto01-bd2.git"
-    },
-    "author": "Aguirre Sabino, Lucas Duete",
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/aguirresabino/projeto01-bd2/issues"
-    },
-    "homepage": "https://github.com/aguirresabino/projeto01-bd2#readme",
-    "dependencies": {
-      "body-parser": "~1.18.2",
-      "cors": "^2.8.4",
-      "express": "~4.16.2",
-      "helmet": "^3.11.0",
-      "morgan": "~1.9.0",
-      "pg": "~7.4.1",
-      "pg-hstore": "~2.3.2",
-      "sequelize": "~4.33.4"
-    },
-    "devDependencies": {
-      "express-generator": "~4.15.5",
-      "nodemon": "~1.15.0",
-      "sequelize-cli": "~4.0.0"
-    }
+  "name": "projeto01-bd2",
+  "version": "1.0.0",
+  "description": "Projeto para a dicisplina de Banco de Dados II do IFPB",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "make-bd": "sequelize db:migrate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aguirresabino/projeto01-bd2.git"
+  },
+  "author": "Aguirre Sabino, Lucas Duete",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aguirresabino/projeto01-bd2/issues"
+  },
+  "homepage": "https://github.com/aguirresabino/projeto01-bd2#readme",
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cors": "^2.8.4",
+    "express": "~4.16.2",
+    "helmet": "^3.11.0",
+    "morgan": "~1.9.0",
+    "pg": "~7.4.1",
+    "pg-hstore": "~2.3.2",
+    "sequelize": "~4.33.4"
+  },
+  "devDependencies": {
+    "express-generator": "~4.15.5",
+    "nodemon": "~1.15.0",
+    "sequelize-cli": "~4.0.0"
   }
+}
