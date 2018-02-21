@@ -1,8 +1,16 @@
+var markerForm;
+
 function createMarkerForm(coordenadas, map) {
 
 	let formBox = '<div id="content" style="width:330px;"><h5 class="flow-text">Cadastro de Marker</h5><input type="text" id="localNome" name="nomeLocal" placeholder="Nome do Local" required><div id="bodyFormContent"><p><input type="text" id="localDescricao" name="descricaoLocal" placeholder="Digite uma Descricao" required></p><p><button class="waves-effect waves-light red btn" style="margin-right:2%" onclick="location.href=\'cadastrarLocalidade.html\'"><i class="material-icons right">menu</i>Nova Pagina</button><button onclick="localStorage.setItem(\'marcador\', JSON.stringify({latitude : ' + coordenadas.latitude + ',longitude: ' + coordenadas.longitude + ',nome: document.getElementById(\'localNome\').value, descricao: document.getElementById(\'localDescricao\').value,nota: 0,id : 1}));" class="waves-effect waves-light btn"><i class="material-icons right">send</i>enviar</button></p></div></div>';
 
-    let marker = new google.maps.Marker({
+    if (typeof markerForm !== 'undefined') {
+        markerForm.setMap(null);
+    } else {
+        alert("pepesad");
+    }
+
+    var markerForm = new google.maps.Marker({
         position: coordenadas,
         map: map
     });
@@ -12,8 +20,8 @@ function createMarkerForm(coordenadas, map) {
         maxWidth: 330
     });
 
-    marker.addListener('click', function() {
-    	formwindow.open(map, marker);
+    markerForm.addListener('click', function() {
+    	formwindow.open(map, markerForm);
     });
 
     map.panTo(coordenadas);
