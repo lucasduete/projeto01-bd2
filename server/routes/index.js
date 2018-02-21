@@ -10,7 +10,7 @@ module.exports = (api) => {
 
    api.post('/api/localidade/cadastrar', localidadeController.create);
    api.get('/api/localidade/:localId', localidadeController.read);
-   api.get('/api/localidade/:nome', localidadeController.readByNome);
+   api.post('/api/localidade', localidadeController.readByNome);
    api.get('/api/localidades', localidadeController.list);
    
 
