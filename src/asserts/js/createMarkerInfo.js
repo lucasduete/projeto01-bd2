@@ -8,7 +8,7 @@ function createMarkerInfo(marcador, map) {
 
   //link pra repo dos icones : https://github.com/Concept211/Google-Maps-Markers
 
-  if (nota <= 2) {
+  if (nota === null || typeof nota === 'undefined' || nota <= 2) {
     icone_url = 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png';
   } else if (nota <= 5) {
     icone_url = 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png';
